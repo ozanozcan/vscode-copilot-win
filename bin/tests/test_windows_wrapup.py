@@ -14,9 +14,7 @@ REPO = Path(__file__).resolve().parents[2]
 
 def run_python(*args, cwd=None, input_text=None):
     if os.name == "nt":
-        launcher = f'"{REPO / "bin/py.cmd"}"'
-        command = f'"{launcher} {subprocess.list2cmdline([*map(str, args)])}"'
-        invocation = ["cmd.exe", "/d", "/s", "/c", command]
+        invocation = [str(REPO / "bin/py.cmd"), *map(str, args)]
     else:
         invocation = ["sh", str(REPO / "bin/py"), *map(str, args)]
     return subprocess.run(
