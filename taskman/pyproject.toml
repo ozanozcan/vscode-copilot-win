@@ -1,0 +1,42 @@
+[project]
+name = "taskman"
+version = "1.0.0"
+description = "Durable Feature→PBI→Task board + living spec + mow orchestration gates (canonical home: ai-wow)"
+requires-python = ">=3.12"
+dependencies = [
+    "pydantic>=2.7",
+]
+
+[project.optional-dependencies]
+pgexport = ["psycopg[binary]>=3.2"]
+
+[project.scripts]
+taskman = "taskman.cli:main"
+mow-preflight = "taskman.mow.preflight:main"
+mow-hydrate-specs = "taskman.mow.hydrate_specs:main"
+mow-plan-import = "taskman.mow.plan_import:main"
+mow-check-grill-writeback = "taskman.mow.check_grill_writeback:main"
+mow-set-registry-status = "taskman.mow.set_registry_status:main"
+mow-check-ship-check = "taskman.mow.check_ship_check:main"
+mow-check-action-report = "taskman.mow.check_action_report:main"
+mow-check-tracker = "taskman.mow.check_tracker:main"
+mow-closeout = "taskman.mow.closeout:main"
+mow-check-verification = "taskman.mow.check_verification:main"
+mow-check-board-sync = "taskman.mow.check_board_sync:main"
+mow-check-board-log = "taskman.mow.check_board_log:main"
+mow-land-wave = "taskman.mow.land_wave:main"
+wrapup-reconcile = "taskman.mow.wrapup_reconcile:main"
+wrapup-audit-links = "taskman.mow.audit_links:main"
+
+[dependency-groups]
+dev = ["pytest>=8.0"]
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+packages = ["taskman"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests", "taskman/eventlog/tests"]

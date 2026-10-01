@@ -1,0 +1,36 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>MOW timeline</title>
+</head>
+<body>
+<main>
+  <h1>MOW timeline</h1>
+  <ol id="chats"></ol>
+</main>
+<script>
+const chatAlias = ({ conversationId, mowAction, stem }) => {
+  const action = typeof mowAction === "string" && mowAction ? mowAction : "unknown";
+  stem = typeof stem === "string" && stem ? stem : "unknown";
+  return `chat ${conversationId} - ${action} - ${stem}`;
+};
+
+const renderChats = chats => {
+  const list = document.getElementById("chats");
+  list.replaceChildren();
+  for (const chat of chats || []) {
+    const item = document.createElement("li");
+    item.textContent = chatAlias(chat);
+    list.append(item);
+  }
+};
+
+fetch("copilot-usage.json")
+  .then(response => response.ok ? response.json() : { records: [] })
+  .then(report => renderChats(report.records))
+  .catch(() => renderChats([]));
+</script>
+</body>
+</html>

@@ -1,0 +1,44 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Roadmap · taskman</title>
+<link rel="icon" href="data:,">   <!-- no favicon request: the server answers only /, /static/* and /api/* (D2) -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Farro:wght@300;400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/static/app.css">
+</head>
+<body>
+<header class="bar"><div class="bar-in">
+  <div class="proj" id="proj">taskman</div>
+  <nav aria-label="Project"><ul>
+    <li><a href="/" aria-current="page">Roadmap</a></li>
+    <li><a href="/board">Board</a></li><li><span title="not built yet">Drawings</span></li>
+    <li><span title="not built yet">Diary</span></li><li><span title="not built yet">Brainstorms</span></li>
+    <li><span title="not built yet">Plans</span></li>
+  </ul></nav>
+</div></header>
+
+<main>
+  <section class="intro">
+    <div><h1>Roadmap</h1>
+      <p class="lede">Every milestone on one spine, in plan order. Its prep work hangs to the left; its build
+        lanes hang to the right, wave by wave. Solid arrows are real dependencies from the board.</p></div>
+    <ul class="legend">
+      <li><span class="sw done"></span>Done</li><li><span class="sw in_progress"></span>In progress</li>
+      <li><span class="sw blocked"></span>Blocked</li><li><span class="sw"></span>To do</li>
+      <li><span class="sw backlog"></span>Backlog</li><li><span class="sw key"></span>Keystone</li>
+      <li><span class="lg-dot"></span>Belongs to</li><li><span class="lg-arrow"></span>Waits for</li>
+    </ul>
+  </section>
+  <div class="map" id="map"><div class="spine-line"></div><svg class="edges" id="edges" aria-hidden="true"></svg>
+    <p class="note" id="status" role="status">Loading the roadmap…</p></div>
+  <section class="loose" id="loose"></section>
+  <div class="tip" id="tip" role="tooltip"></div>
+</main>
+<footer id="foot"></footer>
+<script type="module" src="/static/app.js"></script>
+</body>
+</html>

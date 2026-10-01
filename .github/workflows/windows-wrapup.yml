@@ -1,0 +1,16 @@
+name: Windows wrap-up acceptance
+
+"on":
+  push:
+  pull_request:
+
+jobs:
+  windows-wrapup:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Run exported wrap-up acceptance
+        run: bin\py.cmd bin\tests\test_windows_wrapup.py

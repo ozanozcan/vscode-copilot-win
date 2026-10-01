@@ -1,0 +1,20 @@
+{
+  "hooks": {
+    "SessionStart": [
+      {
+        "type": "command",
+        "command": "python3 .github/hooks/session-start.py",
+        "windows": "cmd.exe /d /s /c \".github\\hooks\\session-start.cmd\"",
+        "timeoutSec": 5
+      }
+    ],
+    "PreToolUse": [
+      {
+        "type": "command",
+        "command": "python3 .github/hooks/pre-tool-use.py",
+        "windows": "cmd.exe /d /s /c \".github\\hooks\\pre-tool-use.cmd\"",
+        "timeoutSec": 5
+      }
+    ]
+  }
+}

@@ -1,0 +1,12 @@
+{
+  "schema": 1,
+  "skills": {
+    "impeccable": {
+      "source": "https://github.com/pbakaus/impeccable.git",
+      "revision": "0d6b47ea19b63afe15e3f93a44d5d9fbbc6fd275",
+      "license": "Apache-2.0",
+      "path": ".github/skills/impeccable",
+      "retrieved_at": "2026-09-30"
+    }
+  }
+}

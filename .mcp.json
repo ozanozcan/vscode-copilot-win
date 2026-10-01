@@ -1,0 +1,4 @@
+{
+  "_comment": "Optional workspace MCP configuration. The public harness works with no configured servers.",
+  "mcpServers": {}
+}

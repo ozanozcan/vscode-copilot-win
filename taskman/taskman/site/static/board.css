@@ -1,0 +1,138 @@
+/* taskman site — Board page, board-only rules. Loaded after /static/app.css, whose tokens, .bar header, .note,
+   .sr and .tip it reuses unchanged. Built to kanban mockup v2 (kanban-board K5). Farro only, no 600 (d#59).
+   Colour carries status and nothing else: it appears only on the column tops (K6). */
+:root{
+  --col:#E7E9EB;
+  --s-done:#2F9E62; --s-in_progress:#C48A1E; --s-review:#3E7CB1; --s-blocked:#D2553C; --s-todo:#14181B; --s-backlog:#8A949B;
+}
+@media (prefers-color-scheme:dark){
+  :root{--col:#181B1E;
+    --s-done:#5FCB93; --s-in_progress:#E0AE4E; --s-review:#7FB2E0; --s-blocked:#F08C72; --s-todo:#E6E9EB; --s-backlog:#8E99A1}
+}
+nav a:hover{color:var(--ink)}
+
+/* ---- head: title, count, controls ---- */
+.head{padding:26px 24px 14px;display:flex;flex-wrap:wrap;align-items:flex-end;justify-content:space-between;gap:16px 32px}
+.head h1{font-size:clamp(26px,3vw,34px);margin:0}
+.sub{margin:6px 0 0;color:var(--ink-2);font-size:15px;font-variant-numeric:tabular-nums}
+.tools{display:flex;flex-wrap:wrap;align-items:center;gap:10px}
+.grp{display:inline-flex;align-items:center;gap:8px}
+.search{position:relative}
+.search input{font:inherit;font-size:14px;width:220px;padding:8px 10px 8px 32px;border:2px solid var(--ink);border-radius:var(--r);
+  background:var(--card);color:var(--ink);caret-color:var(--ink)}
+.search input::placeholder{color:var(--ink-3)}
+.search svg{position:absolute;left:10px;top:50%;transform:translateY(-50%);width:14px;height:14px;stroke:var(--ink-3);fill:none;stroke-width:2}
+/* quick filters: a neutral fill, never an outline chip (K6); pressed = ink fill with paper text */
+.chip{font:inherit;font-size:13px;font-weight:500;padding:7px 12px;border:0;border-radius:999px;background:var(--chip);color:var(--ink);cursor:pointer}
+.chip:hover{background:var(--chip-on)}
+.chip[aria-pressed="true"]{background:var(--ink);color:var(--paper)}
+.seg{display:inline-flex;border:2px solid var(--ink);border-radius:var(--r);overflow:hidden}
+.seg button{font:inherit;font-size:13px;font-weight:500;padding:6px 11px;border:0;background:var(--card);color:var(--ink);cursor:pointer}
+.seg button+button{border-left:2px solid var(--ink)}
+.seg button:hover{background:var(--col)}
+.seg button[aria-pressed="true"]{background:var(--ink);color:var(--paper)}
+.seg button:focus-visible{outline-offset:-4px;outline-color:currentColor}
+.lbl{font-size:13px;color:var(--ink-3)}
+
+.note.err{margin:0 24px 14px;color:var(--ink)}
+.note.err:empty{display:none}
+
+/* ---- live banner: one line per running tracker ---- */
+.live{margin:0 24px 14px;border:2px solid var(--ink);border-radius:var(--r);background:var(--card);padding:10px 14px;
+  display:flex;flex-direction:column;gap:6px;font-size:13.5px}
+.live[hidden]{display:none}
+.live > b{font-weight:700}
+.live .run{display:flex;flex-wrap:wrap;align-items:center;gap:4px 8px;color:var(--ink-2);line-height:1.4}
+.live .run strong{color:var(--ink);font-weight:500}
+.live .run .behind{color:var(--ink);font-weight:700}
+.live small{color:var(--ink-3);font-size:12.5px}
+
+/* ---- columns ---- */
+/* from 1200px every column fits (six at 176px+), so #board is no scroll container and .colh sticks under the
+   sticky .bar at --bar-h, the bar's measured height set by board.js (the nav wraps to a second row at ≤900px).
+   Narrower, #board scrolls sideways, which traps sticky; board.js then carries the header down itself. */
+main.board{max-width:none;margin:0;padding:6px 24px 40px}
+main.board > .note{margin:8px 0 0}
+.grid{display:grid;grid-template-columns:repeat(var(--ncol,5),minmax(176px,1fr));gap:12px}
+.grid + .grid{margin-top:8px}
+.colwrap{min-width:0}
+.colh{position:sticky;top:var(--bar-h,55px);z-index:2;display:flex;align-items:baseline;justify-content:space-between;
+  background:var(--col);border-radius:var(--r) var(--r) 0 0;border-top:4px solid var(--st);padding:10px 12px 8px}
+.colh.s-backlog{--st:var(--s-backlog)} .colh.s-todo{--st:var(--s-todo)} .colh.s-in_progress{--st:var(--s-in_progress)}
+.colh.s-review{--st:var(--s-review)} .colh.s-blocked{--st:var(--s-blocked)} .colh.s-done{--st:var(--s-done)}
+.colh b{font-size:13px;font-weight:700;letter-spacing:.06em;text-transform:uppercase}
+.colh span{font-size:13px;color:var(--ink-3);font-variant-numeric:tabular-nums}
+.col{background:var(--col);border-radius:0 0 var(--r) var(--r);padding:6px 8px 10px;display:flex;flex-direction:column;gap:8px;min-height:56px}
+.col .empty{font-size:13px;color:var(--ink-3);text-align:center;padding:14px 0;margin:0}
+.more{font:inherit;font-size:13px;font-weight:500;padding:8px 12px;border:0;border-radius:var(--r);background:var(--chip);color:var(--ink);cursor:pointer}
+.more:hover{background:var(--chip-on)}
+
+.lane-h{grid-column:1 / -1;display:flex;align-items:baseline;gap:10px;margin:18px 0 2px;padding-bottom:6px;border-bottom:2px solid var(--ink);min-width:0}
+.lane-h b{font-size:16px;font-weight:700;overflow-wrap:anywhere} .lane-h span{font-size:13px;color:var(--ink-3);white-space:nowrap}
+.grid:first-child .lane-h{margin-top:0}
+
+/* ---- card: neutral; agent cards carry the robot, "Agent lane" and the lane-letter disc ---- */
+.card{position:relative;background:var(--card);border:1px solid var(--line-2);border-radius:var(--r);padding:9px 10px 8px;
+  box-shadow:0 1px 2px rgba(0,0,0,.05);transition:box-shadow .18s ease-out,transform .18s ease-out;overflow-wrap:anywhere;cursor:default}
+.card:hover{box-shadow:0 6px 16px -8px rgba(0,0,0,.28);transform:translateY(-1px)}
+.card.key{border:2.5px solid var(--ink)}
+.card.done .t{color:var(--ink-3)}
+.card .epic{display:block;font-size:12px;line-height:1.3;font-weight:500;color:var(--ink-3);margin:0 0 4px}
+.card .t{font-size:14px;line-height:1.35;margin:0 0 8px;display:-webkit-box;-webkit-line-clamp:3;line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
+.card .foot{display:flex;align-items:center;gap:8px;font-size:12px;color:var(--ink-2)}
+.card .foot .id{font-weight:700;color:var(--ink);font-variant-numeric:tabular-nums}
+.card .disc{flex:none;width:20px;height:20px;border-radius:50%;border:2px solid var(--ink);display:grid;place-items:center;font-size:11px;font-weight:700;color:var(--ink)}
+.card .kind{font-size:12px;font-weight:500;color:var(--ink-2)}
+.prio{margin-left:auto;display:flex;align-items:flex-end;gap:2px;height:12px}
+.prio i{width:3px;background:var(--line-2);border-radius:1px}
+.prio i:nth-child(1){height:5px} .prio i:nth-child(2){height:8px} .prio i:nth-child(3){height:11px}
+.prio.p3 i,.prio.p2 i:nth-child(-n+2),.prio.p1 i:nth-child(1){background:var(--ink)}
+.card .wait,.card .origin{display:block;margin-top:6px;font-size:12px;font-weight:500;color:var(--ink)}
+.card .origin{color:var(--ink-2)}
+.card .labels{display:flex;flex-wrap:wrap;gap:4px;margin:-2px 0 8px}
+.card .labels span{font-size:11px;color:var(--ink-3)}
+.card .labels span::before{content:"· "}
+.card .labels span:first-child::before{content:""}
+.who{display:flex;align-items:center;gap:6px;margin:0 0 6px;font-size:12px;font-weight:500;color:var(--ink-2)}
+.who svg{width:14px;height:14px;fill:none;stroke:currentColor;stroke-width:1.6}
+.ring{position:relative}
+.ring.run::after{content:"";position:absolute;inset:-4px;border-radius:50%;border:2px dashed var(--ink);animation:spin 16s linear infinite}
+@keyframes spin{to{transform:rotate(1turn)}}
+.livebox{margin-top:8px;padding-top:7px;border-top:1px dashed var(--line-2);font-size:12px;line-height:1.45;color:var(--ink-2)}
+.livebox b{color:var(--ink);font-weight:700}
+.livebox .f{display:block;margin-top:3px;color:var(--ink)}
+.livebox .tag{display:block;font-weight:700;letter-spacing:.05em;text-transform:uppercase;font-size:10.5px}
+.live .disc{flex:none;width:22px;height:22px;border-radius:50%;border:2px solid var(--ink);display:grid;place-items:center;font-size:11px;font-weight:700;color:var(--ink)}
+
+/* tooltip: app.css .tip, with one block per fact */
+.tip span{display:block} .tip span+span{margin-top:3px} .tip .tt{font-weight:500}
+
+.hidden-note{padding:0 24px;margin:0 0 12px;font-size:13px;color:var(--ink-3)}
+.hidden-note:empty{display:none}
+footer{max-width:none;padding:0 24px 30px}
+
+@media (max-width:1199px){
+  main.board{overflow-x:auto}
+  main.board .colh{top:0}
+}
+@media (max-width:900px){
+  nav a{min-height:44px}
+  .head{padding:20px 16px 12px}
+  .tools{gap:8px}
+  .search{flex:1 1 100%} .search input{width:100%;min-height:44px}
+  .chip,.seg button,.more{min-height:44px;min-width:44px}
+  .more{width:100%}
+  .live,.note.err{margin-left:16px;margin-right:16px}
+  main.board{padding:6px 16px 32px}
+  .hidden-note,footer{padding-left:16px;padding-right:16px}
+}
+@media (max-width:760px){
+  .grid{min-width:0;grid-auto-flow:column;grid-template-columns:none;grid-auto-columns:84%}
+  .grid>*{scroll-snap-align:start}
+  main.board{scroll-snap-type:x mandatory}
+  main.board.grouped{overflow-x:visible;scroll-snap-type:none}   /* stacked: nothing scrolls sideways, so sticky works */
+  main.board.grouped .colh{top:var(--bar-h,55px)}
+  .grouped .grid{grid-auto-flow:row;grid-template-columns:1fr;grid-auto-columns:auto}
+  .card .t{display:block;-webkit-line-clamp:unset;line-clamp:none;overflow:visible}   /* no clamp: phones have no hover */
+}
+@media (prefers-reduced-motion:reduce){.card{transition:none}.card:hover{transform:none}.ring.run::after{animation:none}}

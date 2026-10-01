@@ -1,0 +1,47 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Board · taskman</title>
+<link rel="icon" href="data:,">   <!-- no favicon request: the server answers only /, /board, /static/* and /api/* -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Farro:wght@300;400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/static/app.css">
+<link rel="stylesheet" href="/static/board.css">
+</head>
+<body>
+<header class="bar"><div class="bar-in">
+  <div class="proj" id="proj">taskman</div>
+  <nav aria-label="Project"><ul>
+    <li><a href="/">Roadmap</a></li>
+    <li><a href="/board" aria-current="page">Board</a></li><li><span title="not built yet">Drawings</span></li>
+    <li><span title="not built yet">Diary</span></li><li><span title="not built yet">Brainstorms</span></li>
+    <li><span title="not built yet">Plans</span></li>
+  </ul></nav>
+</div></header>
+
+<section class="head">
+  <div><h1>Board</h1><p class="sub" id="sub"></p></div>
+  <div class="tools">
+    <label class="search"><svg viewBox="0 0 16 16" aria-hidden="true"><circle cx="7" cy="7" r="5"/><path d="M11 11l3.5 3.5"/></svg>
+      <input id="q" type="search" placeholder="Search title, #id or plan" aria-label="Search cards" autocomplete="off"></label>
+    <span class="seg" role="group" aria-label="Show"><button type="button" data-w="all" aria-pressed="true">All</button><button type="button" data-w="people" aria-pressed="false">People</button><button type="button" data-w="agents" aria-pressed="false">Agents</button></span>
+    <button type="button" class="chip" data-f="waiting" aria-pressed="false">Blocked or waiting</button>
+    <button type="button" class="chip" data-f="urgent" aria-pressed="false">Keystone + high</button>
+    <span class="grp"><span class="lbl" id="lbl-g">Group by</span>
+      <span class="seg" role="group" aria-labelledby="lbl-g"><button type="button" data-g="none" aria-pressed="true">None</button><button type="button" data-g="plan" aria-pressed="false">Plan</button></span></span>
+    <span class="grp"><span class="lbl" id="lbl-l">Live runs</span>
+      <span class="seg" role="group" aria-labelledby="lbl-l"><button type="button" data-l="on" aria-pressed="true">On</button><button type="button" data-l="off" aria-pressed="false">Off</button></span></span>
+  </div>
+</section>
+<p class="note err" id="err" role="alert"></p>
+<section class="live" id="live" aria-label="Live runs" hidden></section>
+<main class="board" id="board"><p class="note" role="status">Loading the board…</p></main>
+<p class="hidden-note" id="hidden"></p>
+<div class="tip" id="tip" role="tooltip"></div>
+<footer id="foot">Built from the board and docs/plans/*/dispatch/tracker.json · refreshes every 3 s while this tab is open · read-only</footer>
+<script type="module" src="/static/board.js"></script>
+</body>
+</html>
